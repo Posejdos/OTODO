@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Hello from '$lib/Hello.svelte';
 	import Login from '$lib/Login.svelte';
+
+	let logged_in: boolean = false;
 </script>
 
 <svelte:head>
@@ -9,4 +11,9 @@
 </svelte:head>
 
 <Hello />
+
+{#if !logged_in}
 <Login />
+{:else}
+<Hello />
+{/if}

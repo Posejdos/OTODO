@@ -1,16 +1,43 @@
+<script lang="ts">
+	let usernameInput = '';
+	let passwordInput = '';
+	let submitting = false;
+
+	function login() {
+		submitting = true;
+		console.log("clicked!");
+		console.log(usernameInput);
+		console.log(passwordInput);
+	}
+</script>
+
 <div class="container">
 	<div class="screen">
         <form class="login">
-            <div class="login__field">
-                <i class="login__icon fas fa-user"></i>
-                <input type="text" class="login__input" placeholder="User name / Email">
+            <div class="login__field">                
+                <input 
+					type="text" 
+					class="log_input" 
+					placeholder="Username" 
+					disabled={submitting}
+					bind:value={usernameInput}
+				>
+
+                <input 
+					type="password" 
+					class="log_input"						
+					placeholder="Password"
+					disabled={submitting}
+					bind:value={passwordInput}
+				>
             </div>
-            <div class="login__field">
-                <i class="login__icon fas fa-lock"></i>
-                <input type="password" class="login__input" placeholder="Password">
-            </div>
-            <button class="button button">
-                <span class="button__text">Log In</span>
+
+            <button 
+				type="button" 
+				class="login_btn" 
+				disabled={submitting}
+				on:click={login}>
+					<span>Log In</span>
             </button>				
         </form>
 	</div>
@@ -43,17 +70,14 @@
         border-radius: 30px;
 	}
 
-	.login__field {
+	.login__field > *{
         align-items: center;
 		justify-content: center;
-		padding: 20px 0px;	
+		padding: 20px 20px;	
+		margin: 10px 0;
 	}
 
-	.login__icon {
-		color: #7875B5;
-	}
-
-	.login__input {
+	.log_input {
 		border: none;
 		border-bottom: 2px solid #D1D1D4;
 		background: none;
@@ -63,14 +87,14 @@
 		transition: .2s;
 	}
 
-	.login__input:active,
-	.login__input:focus,
-	.login__input:hover {
+	.log_input:active,
+	.log_input:focus,
+	.log_input:hover {
 		outline: none;
 		border-bottom-color: #6A679E;
 	}
 
-	.button {
+	.login_btn {
 		background: #fff;
 		font-size: 14px;
 		margin-top: 10px;
@@ -88,10 +112,14 @@
 		transition: .2s;
 	}
 
-	.button:active,
-	.button:focus,
-	.button:hover {
+	.login_btn:active,
+	.login_btn:focus,
+	.login_btn:hover {
 		border-color: #6A679E;
 		outline: none;
+	}
+
+	.login_btn:disabled {
+		background: grey;
 	}
 </style>
