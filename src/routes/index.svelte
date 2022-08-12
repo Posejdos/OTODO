@@ -1,8 +1,12 @@
 <script lang="ts">
 	import Hello from '$lib/Hello.svelte';
-	import Login from '$lib/Login.svelte';
+	import Login, {logged_in} from '$lib/Login.svelte';
 
-	let logged_in: boolean = false;
+	/* Subscribe to know if user logged */
+	let auth_done = false;
+	logged_in.subscribe(value => {
+		auth_done = value;
+	});
 </script>
 
 <svelte:head>
@@ -12,8 +16,8 @@
 
 <Hello />
 
-{#if !logged_in}
+{#if !auth_done}
 <Login />
-{:else}
+{:else}  
 <Hello />
 {/if}

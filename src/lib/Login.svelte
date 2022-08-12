@@ -1,10 +1,15 @@
-<script lang="ts">
+<script lang="ts" context="module">
+	import { writable } from 'svelte/store';
+
 	let usernameInput = '';
 	let passwordInput = '';
 	let submitting = false;
+	/* Use a store to pass indication if user is logged */
+	export const logged_in = writable(false);
 
 	function login() {
 		submitting = true;
+		logged_in.set(true);
 		console.log("clicked!");
 		console.log(usernameInput);
 		console.log(passwordInput);
