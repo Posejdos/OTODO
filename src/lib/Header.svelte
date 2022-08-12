@@ -1,3 +1,8 @@
+<!-- 	Header, which is always visible
+		Simply speaking, this is the navbar
+-->
+
+<!-- import page to resolve URLs -->
 <script lang="ts">
 	import { page } from '$app/stores';
 </script>

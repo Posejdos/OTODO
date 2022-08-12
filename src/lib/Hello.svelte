@@ -1,3 +1,7 @@
+<!--    This is the welcoming component
+        TODO: make it look more awesome?
+-->
+
 <section class="hello">
     <h1>OTODO</h1>
     <h2>Your new way to remember</h2>

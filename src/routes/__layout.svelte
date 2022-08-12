@@ -1,3 +1,11 @@
+<!-- 	This is the layout file, 
+		global for all pages.
+
+		Enables us to see the header
+		and possibly a footnote on
+		all pages.
+-->
+
 <script lang="ts">
 	import Header from '$lib/Header.svelte';
 </script>
