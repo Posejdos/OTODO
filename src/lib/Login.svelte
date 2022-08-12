@@ -8,11 +8,18 @@
 	export const logged_in = writable(false);
 
 	function login() {
+		if (!validateUserAndPasswd(usernameInput, passwordInput)) {
+			/* TODO: clear username and passwd */
+			alert("Username or password are too short");
+			return;
+		}
+
 		submitting = true;
 		logged_in.set(true);
-		console.log("clicked!");
-		console.log(usernameInput);
-		console.log(passwordInput);
+	}
+
+	function validateUserAndPasswd(username: string, passwd: string): Boolean {
+		return username.length > 3 && passwd.length > 3;
 	}
 </script>
 
