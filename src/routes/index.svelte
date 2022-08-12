@@ -1,2 +1,12 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import Hello from '$lib/Hello.svelte';
+    import Header from '$lib/Header.svelte'
+</script>
+
+<svelte:head>
+	<title>OTODO</title>
+	<meta name="description" content="Svelte Online TODO app" />
+</svelte:head>
+
+<Header />
+<Hello />
