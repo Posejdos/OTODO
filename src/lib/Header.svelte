@@ -4,12 +4,11 @@
 
 <nav>
     <ul>
-        <li class:active={$page.url.pathname === '/'}><a sveltekit:prefetch href="/">Home</a></li>
+        <li class:active={$page.url.pathname === '/'}>
+			<a sveltekit:prefetch href="/">Home</a>
+		</li>
         <li class:active={$page.url.pathname === '/about'}>
             <a sveltekit:prefetch href="/about">About</a>
-        </li>
-        <li class:active={$page.url.pathname === '/todos'}>
-            <a sveltekit:prefetch href="/todos">Todos</a>
         </li>
     </ul>
 </nav>
@@ -19,9 +18,11 @@
 		display: flex;
 		justify-content: center;        
 		--background: rgba(239, 28, 56, 0.7);
+		--pin: rgba(35, 61, 177, 0.5);
 	}
 
 	ul {
+		border-radius: 15px;
 		position: relative;
 		padding: 0;
 		margin: 0;
@@ -40,7 +41,7 @@
 	}
 
 	li.active::before {
-		--size: 6px;
+		--size: 10px;
 		content: '';
 		width: 0;
 		height: 0;
@@ -48,7 +49,7 @@
 		top: 0;
 		left: calc(50% - var(--size));
 		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--accent-color);
+		border-top: var(--size) solid var(--pin);
 	}
 
 	nav a {
@@ -56,7 +57,7 @@
 		height: 100%;
 		align-items: center;
 		padding: 0 1em;
-		color: var(--heading-color);
+		color: black;
 		font-weight: 700;
 		font-size: 0.8rem;
 		text-transform: uppercase;
@@ -66,6 +67,6 @@
 	}
 
 	a:hover {
-		color: var(--accent-color);
+		color: white;
 	}
 </style>

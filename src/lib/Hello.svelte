@@ -13,7 +13,7 @@
 
     h1 {
         font-family: 'Courier New', Courier, monospace;
-        font-weight: 5000;
+        font-weight: 1000;
         font-size: 50px;        
         margin-bottom: 5px;
     }
