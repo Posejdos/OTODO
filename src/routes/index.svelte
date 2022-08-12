@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Hello from '$lib/Hello.svelte';
+	import Login from '$lib/Login.svelte';
 </script>
 
 <svelte:head>
@@ -8,3 +9,4 @@
 </svelte:head>
 
 <Hello />
+<Login />

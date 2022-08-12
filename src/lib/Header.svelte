@@ -23,7 +23,7 @@
 		display: flex;
 		justify-content: center;        
 		margin-bottom: -20px;
-		--background: rgba(239, 28, 56, 0.7);
+		--background: linear-gradient(90deg, #918ec7, #e98d8d);
 		--pin: rgba(35, 61, 177, 0.5);
 	}
 
