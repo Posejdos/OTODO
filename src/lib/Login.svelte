@@ -1,20 +1,16 @@
-<!-- <script lang="ts">
+<script lang="ts">
 	import { onMount } from 'svelte';
-	export let userbase;  	
-	onMount(async ()=> { 		 
-			const p = await import('userbase-js'); 
-			userbase = p.default;	
-			userbase.init({appId: 'f9b46204-af08-4fd4-94a5-a5a2a8c7d9fb'});	 
-	});
-</script> -->
 
-<script lang="ts" context="module">
-	import { writable } from 'svelte/store';
 	let usernameInput = '';
 	let passwordInput = '';
 	let page_disable = true;
-	/* Use a store to pass indication if user is logged */
-	export const logged_in = writable(false);
+
+	let userbase;  	
+	onMount(async ()=> { 		 
+			const p = await import('userbase-js'); 
+			userbase = p.default;	
+			userbase.init({appId: 'f9b46204-af08-4fd4-94a5-a5a2a8c7d9fb'});
+	});
 
 	function login() {
 		if (!validateUserAndPasswd(usernameInput, passwordInput)) {
@@ -39,6 +35,12 @@
 	function validateUserAndPasswd(username: string, passwd: string): Boolean {
 		return username.length > 3 && passwd.length > 3;
 	}
+</script>
+
+<script lang="ts" context="module">
+	import { writable } from 'svelte/store';
+	/* Use a store to pass indication if user is logged */
+	export const logged_in = writable(false);
 </script>
 
 <div class="container">
