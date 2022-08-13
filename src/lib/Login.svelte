@@ -1,9 +1,18 @@
+<!-- <script lang="ts">
+	import { onMount } from 'svelte';
+	export let userbase;  	
+	onMount(async ()=> { 		 
+			const p = await import('userbase-js'); 
+			userbase = p.default;	
+			userbase.init({appId: 'f9b46204-af08-4fd4-94a5-a5a2a8c7d9fb'});	 
+	});
+</script> -->
+
 <script lang="ts" context="module">
 	import { writable } from 'svelte/store';
-
 	let usernameInput = '';
 	let passwordInput = '';
-	let submitting = false;
+	let page_disable = true;
 	/* Use a store to pass indication if user is logged */
 	export const logged_in = writable(false);
 
@@ -13,8 +22,7 @@
 			alert("Username or password are too short");
 			return;
 		}
-
-		submitting = true;
+		page_disable = true;
 		logged_in.set(true);
 	}
 
@@ -24,9 +32,8 @@
 			alert("Username or password are too short.");
 			return;
 		}
-		
-		submitting = true;
-		
+
+		page_disable = true;
 	}
 
 	function validateUserAndPasswd(username: string, passwd: string): Boolean {
@@ -42,7 +49,7 @@
 					type="text" 
 					class="log_input" 
 					placeholder="Username" 
-					disabled={submitting}
+					disabled={page_disable}
 					bind:value={usernameInput}
 				>
 
@@ -50,7 +57,7 @@
 					type="password" 
 					class="log_input"						
 					placeholder="Password"
-					disabled={submitting}
+					disabled={page_disable}
 					bind:value={passwordInput}
 				>
             </div>
@@ -58,7 +65,7 @@
             <button 
 				type="button" 
 				class="login_btn" 
-				disabled={submitting}
+				disabled={page_disable}
 				on:click={login}>
 					<span>Log In</span>
             </button>		
@@ -67,7 +74,7 @@
 		<button 
 		type="button" 
 		class="signup_btn" 
-		disabled={submitting}
+		disabled={page_disable}
 		on:click={signUp}>
 			<span>Sign Up</span>
 		</button>
