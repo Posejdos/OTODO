@@ -18,6 +18,17 @@
 		logged_in.set(true);
 	}
 
+	function signUp() {
+		if (!validateUserAndPasswd(usernameInput, passwordInput)) {
+			/* TODO: clear username and passwd */
+			alert("Username or password are too short.");
+			return;
+		}
+		
+		submitting = true;
+		
+	}
+
 	function validateUserAndPasswd(username: string, passwd: string): Boolean {
 		return username.length > 3 && passwd.length > 3;
 	}
@@ -57,7 +68,7 @@
 		type="button" 
 		class="signup_btn" 
 		disabled={submitting}
-		on:click={login}>
+		on:click={signUp}>
 			<span>Sign Up</span>
 		</button>
 
