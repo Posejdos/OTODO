@@ -50,8 +50,17 @@
 				disabled={submitting}
 				on:click={login}>
 					<span>Log In</span>
-            </button>				
+            </button>		
         </form>
+
+		<button 
+		type="button" 
+		class="signup_btn" 
+		disabled={submitting}
+		on:click={login}>
+			<span>Sign Up</span>
+		</button>
+
 	</div>
 </div>
 
@@ -124,6 +133,27 @@
 		transition: .2s;
 	}
 
+	.signup_btn {
+		background: #fff;
+		font-size: 20px;
+		margin-top: 30px;
+		padding: 16px 20px;
+		border-radius: 10px;
+		border: 1px solid #D4D3E8;
+		text-transform: uppercase;
+		font-weight: 700;
+		display: flex;
+		align-items: center;
+		width: 100%;
+		color: #4C489D;
+		box-shadow: 0px 2px 2px #5C5696;
+		cursor: pointer;
+		transition: .2s;
+	}
+
+	.signup_btn:active,
+	.signup_btn:focus,
+	.signup_btn:hover,
 	.login_btn:active,
 	.login_btn:focus,
 	.login_btn:hover {
@@ -131,6 +161,7 @@
 		outline: none;
 	}
 
+	.signup_btn:disabled,
 	.login_btn:disabled {
 		background: grey;
 	}
