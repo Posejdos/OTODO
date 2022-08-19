@@ -1,16 +1,7 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	let usernameInput = '';
 	let passwordInput = '';
 	let page_disable = true;
-
-	let userbase;  	
-	onMount(async ()=> { 		 
-			const p = await import('userbase-js'); 
-			userbase = p.default;	
-			userbase.init({appId: 'f9b46204-af08-4fd4-94a5-a5a2a8c7d9fb'});
-	});
 
 	function login() {
 		if (!validateUserAndPasswd(usernameInput, passwordInput)) {
@@ -18,6 +9,7 @@
 			alert("Username or password are too short");
 			return;
 		}
+		
 		page_disable = true;
 		logged_in.set(true);
 	}
