@@ -1,7 +1,7 @@
 <script lang="ts">
 	let usernameInput = '';
 	let passwordInput = '';
-	let page_disable = true;
+	let page_disable = false;
 
 	function login() {
 		if (!validateUserAndPasswd(usernameInput, passwordInput)) {
@@ -14,12 +14,26 @@
 		logged_in.set(true);
 	}
 
-	function signUp() {
+	async function signUp() {
 		if (!validateUserAndPasswd(usernameInput, passwordInput)) {
 			/* TODO: clear username and passwd */
 			alert("Username or password are too short.");
-			return;
+			return;			
 		}
+
+		const res = await fetch('/login', {
+			method: 'POST',
+			body: JSON.stringify({
+				usr: usernameInput,
+				pwd: passwordInput,
+			}),
+			headers: {
+				"content-type": "application/json"
+			}
+		})
+		
+		const json = await res.json()
+		let result = JSON.stringify(json)
 
 		page_disable = true;
 	}
