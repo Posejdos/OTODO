@@ -12,13 +12,21 @@ app.get('/healthcheck', (req, res) => {
 
 app.use(express.json())
 app.post('/login', (req, res) => {
-	console.log(req.body)
+	const {username, password} = req.body
+
+	res.sendStatus(200)
+});
+
+app.post('/signup', (req, res) => {
+	const {username, password} = req.body
+
+	console.log('Uname: ' + username)
+	console.log('Pwd: ' + password)
 	res.sendStatus(200)
 });
 
 app.use(handler)
 app.use(cors())
-
 app.listen(port, () => {
     console.log('App on', port)
 });

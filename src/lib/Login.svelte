@@ -3,12 +3,23 @@
 	let passwordInput = '';
 	let page_disable = false;
 
-	function login() {
+	async function login() {
 		if (!validateUserAndPasswd(usernameInput, passwordInput)) {
 			/* TODO: clear username and passwd */
 			alert("Username or password are too short");
 			return;
 		}
+
+		const res = await fetch('/login', {
+			method: 'POST',
+			body: JSON.stringify({
+				username: usernameInput,
+				password: passwordInput,
+			}),
+			headers: {
+				"content-type": "application/json"
+			}
+		})
 		
 		page_disable = true;
 		logged_in.set(true);
@@ -21,19 +32,16 @@
 			return;			
 		}
 
-		const res = await fetch('/login', {
+		const res = await fetch('/signup', {
 			method: 'POST',
 			body: JSON.stringify({
-				usr: usernameInput,
-				pwd: passwordInput,
+				username: usernameInput,
+				password: passwordInput,
 			}),
 			headers: {
 				"content-type": "application/json"
 			}
 		})
-		
-		const json = await res.json()
-		let result = JSON.stringify(json)
 
 		page_disable = true;
 	}
