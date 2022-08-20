@@ -14,6 +14,11 @@ const query = (command, method = 'all') => {
     }); 
 };
 
+async function checkIfExists(username) {
+	const user = await query(`SELECT * FROM users WHERE username = "${username}"`);
+	return (user.length == 1);
+}
+
 /* Needs to be sure that there's no user with that username */
 async function storeUser(username, password) {
 	const hash = await hashPassword(password)
@@ -22,8 +27,8 @@ async function storeUser(username, password) {
 
 /* Needs to be sure that there's a user with that username */
 async function validateUser(username, password) {
-	const user = await query(`SELECT username, hash FROM users WHERE username = "${username}"`);
-	const currentHash = user[0].hash;
+	const user = await query(`SELECT username, hash FROM users WHERE username = "${username}"`)[0];
+	const currentHash = user.hash;
 
 	return (await bcrypt.compare(password, currentHash));
 }
@@ -50,6 +55,4 @@ db.serialize(async () => {
 	await createTestUsers();
 
 	const existingUsers = await query('SELECT rowid as id, username, hash FROM users');
-	console.log(await validateUser("TestUsr2", "TestPwd2"));
-	console.log(await validateUser("TestUsr2", "Testpwd2"));
 });
