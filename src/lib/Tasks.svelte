@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import {logged_user} from '$lib/Login.svelte';
 
     let user = '';

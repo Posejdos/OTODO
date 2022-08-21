@@ -22,7 +22,7 @@ const query = (command, method = 'all') => {
 
 async function dbInit() {
 	db.serialize(async () => {
-		await query("CREATE TABLE IF NOT EXISTS users (username text, hash text)", 'run');
+		await query("CREATE TABLE IF NOT EXISTS users (username text, hash text, tasks text)", 'run');
 		await createTestUsers();
 	});
 }
@@ -48,6 +48,27 @@ async function trySignUp(username, password) {
 	return dbReturn.OK;
 }
 
+async function readTasks(username) {
+	let usr = await query(`SELECT tasks FROM users WHERE username = "${username}"`);
+	let task_list = usr[0].tasks.split(";");
+	let ret = []
+
+	task_list.forEach(task => {
+		if (task != '') {
+			ret.push(task);
+		}
+	});
+
+	return ret;
+}
+
+async function addTask(username, task) {
+	let usr = await query(`SELECT tasks FROM users WHERE username = "${username}"`);
+	usr[0].tasks += `${task};`
+	await query(`UPDATE users SET tasks="${usr[0].tasks}" WHERE username = "${username}"`);
+}
+/* -------------PRIVATE-----------------*/
+
 async function checkIfExists(username) {
 	const user = await query(`SELECT * FROM users WHERE username = "${username}"`);
 	return (user.length == 1);
@@ -56,7 +77,7 @@ async function checkIfExists(username) {
 /* Needs to be sure that there's no user with that username */
 async function storeUser(username, password) {
 	const hash = await hashPassword(password)
-	await query(`INSERT INTO users VALUES ("${username}", "${hash}")`, 'run');
+	await query(`INSERT INTO users VALUES ("${username}", "${hash}", "")`, 'run');
 }
 
 /* Needs to be sure that there's a user with that username */
@@ -84,4 +105,4 @@ const createTestUsers = async() => {
 	}
 };
 
-export {dbReturn, dbInit, tryLogin, trySignUp};
+export {dbReturn, dbInit, tryLogin, trySignUp, readTasks, addTask};
