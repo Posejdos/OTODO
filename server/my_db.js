@@ -24,6 +24,8 @@ async function dbInit() {
 	db.serialize(async () => {
 		await query("CREATE TABLE IF NOT EXISTS users (username text, hash text, tasks text)", 'run');
 		await createTestUsers();
+
+		await addTask("TestUsr1", "Pucio henzap");
 	});
 }
 

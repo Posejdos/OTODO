@@ -1,7 +1,7 @@
 import { handler } from '../build/handler.js'
 import express from 'express'
 import cors from 'cors'
-import {dbReturn, dbInit, tryLogin, trySignUp} from './my_db.js'
+import {dbReturn, dbInit, tryLogin, trySignUp, readTasks, addTask} from './my_db.js'
 
 const app = express()
 const port = process.env.PORT || 4000
@@ -20,7 +20,6 @@ app.post('/login', async (req, res) => {
 	if (loginResult == dbReturn.loginError) {
 		res.json({
 			userAuth: false,
-			data: [],
 		});
 
 		return;
@@ -28,7 +27,6 @@ app.post('/login', async (req, res) => {
 
 	res.json({
 		userAuth: true,
-		data: [], //put tasks here??
 	});
 });
 
@@ -47,6 +45,15 @@ app.post('/signup', async (req, res) => {
 	res.json({
 		ok: true,
 	})
+});
+
+app.post('/tasks', async (req, res) => {
+	const {user} = req.body;
+	const tasks = await readTasks(user);
+
+	res.json({
+		tasks: tasks,
+	});
 });
 
 app.use(handler)

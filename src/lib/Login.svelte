@@ -24,7 +24,7 @@
 		})
 
 		const res_json = await res.json();
-		const {userAuth, data} = res_json
+		const {userAuth} = res_json
 
 		if (!userAuth) {
 			clearInputs();
@@ -35,7 +35,6 @@
 		
 		logged_in.set(true);
 		logged_user.set(usernameInput);
-		//TODO: what to do with data[]?
 	}
 
 	async function signUp() {
