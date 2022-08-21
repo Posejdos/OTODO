@@ -1,6 +1,13 @@
 import sqlite3 from 'sqlite3'
 import bcrypt from 'bcrypt'
 
+const dbReturn = {
+	OK: Symbol(0),
+	userAlreadyExists: Symbol(1),
+	userNotRegistered: Symbol(2),
+	wrongPassword: Symbol(3),
+};
+
 const db = new sqlite3.Database('./data.db')
 const query = (command, method = 'all') => {
     return new Promise((resolve, reject) => {
@@ -13,6 +20,34 @@ const query = (command, method = 'all') => {
         });
     }); 
 };
+
+async function dbInit() {
+	db.serialize(async () => {
+		await query("CREATE TABLE IF NOT EXISTS users (username text, hash text)", 'run');
+		await createTestUsers();
+	});
+}
+
+async function tryLogin(username, password) {
+	if (!(await checkIfExists(username))) {
+		return dbReturn.userNotRegistered;
+	}
+
+	if (!(await validateUser(username, password))) {
+		return dbReturn.wrongPassword;
+	}
+
+	return dbReturn.OK;
+}
+
+async function trySignUp(username, password) {
+	if (await checkIfExists(username)) {
+		return dbReturn.userAlreadyExists;
+	}
+
+	await storeUser(username, password);
+	return dbReturn.OK;
+}
 
 async function checkIfExists(username) {
 	const user = await query(`SELECT * FROM users WHERE username = "${username}"`);
@@ -50,9 +85,4 @@ const createTestUsers = async() => {
 	}
 };
 
-db.serialize(async () => {
-    await query("CREATE TABLE IF NOT EXISTS users (username text, hash text)", 'run');
-	await createTestUsers();
-
-	const existingUsers = await query('SELECT rowid as id, username, hash FROM users');
-});
+export {dbReturn, dbInit, tryLogin, trySignUp};
