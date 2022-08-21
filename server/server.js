@@ -17,16 +17,19 @@ app.post('/login', async (req, res) => {
 	const {username, password} = req.body
 
 	const loginResult = await tryLogin(username, password);
-	if (loginResult == dbReturn.userNotRegistered) {
-		
+	if (loginResult == dbReturn.loginError) {
+		res.json({
+			userAuth: false,
+			data: [],
+		});
+
+		return;
 	}
 
-	else if (loginResult == dbReturn.wrongPassword) {
-
-	}
-
-	//here is OK logic
-	res.sendStatus(200)
+	res.json({
+		userAuth: true,
+		data: [], //put tasks here??
+	});
 });
 
 app.post('/signup', async (req, res) => {
@@ -34,11 +37,16 @@ app.post('/signup', async (req, res) => {
 
 	const signUpResult = await trySignUp(username, password);
 	if (signUpResult == dbReturn.userAlreadyExists) {
-		
+		res.json({
+			ok: false,
+		})
+
+		return;
 	}
 
-	//here is OK logic
-	res.sendStatus(200);
+	res.json({
+		ok: true,
+	})
 });
 
 app.use(handler)

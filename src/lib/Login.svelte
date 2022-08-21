@@ -5,10 +5,12 @@
 
 	async function login() {
 		if (!validateUserAndPasswd(usernameInput, passwordInput)) {
-			/* TODO: clear username and passwd */
+			clearInputs();
 			alert("Username or password are too short");
 			return;
 		}
+
+		page_disable = true;
 
 		const res = await fetch('/login', {
 			method: 'POST',
@@ -20,17 +22,29 @@
 				"content-type": "application/json"
 			}
 		})
+
+		const res_json = await res.json();
+		const {userAuth, data} = res_json
+
+		if (!userAuth) {
+			clearInputs();
+			alert("Invalid username or password");
+			page_disable = false;
+			return;
+		}
 		
-		page_disable = true;
 		logged_in.set(true);
+		//TODO: what to do with data[]?
 	}
 
 	async function signUp() {
 		if (!validateUserAndPasswd(usernameInput, passwordInput)) {
-			/* TODO: clear username and passwd */
+			clearInputs();
 			alert("Username or password are too short.");
 			return;			
 		}
+
+		page_disable = true;
 
 		const res = await fetch('/signup', {
 			method: 'POST',
@@ -43,11 +57,26 @@
 			}
 		})
 
-		page_disable = true;
+		const res_json = await res.json()
+		const {ok} = res_json
+
+		if (!ok) {
+			clearInputs();
+			alert("User with that name already exists");
+			page_disable = false;
+			return;
+		}
+		
+		alert("Sign up successfull");
 	}
 
 	function validateUserAndPasswd(username: string, passwd: string): Boolean {
 		return username.length > 3 && passwd.length > 3;
+	}
+
+	function clearInputs() {
+		usernameInput = ''
+		passwordInput = ''
 	}
 </script>
 

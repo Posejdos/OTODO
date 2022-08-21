@@ -4,8 +4,7 @@ import bcrypt from 'bcrypt'
 const dbReturn = {
 	OK: Symbol(0),
 	userAlreadyExists: Symbol(1),
-	userNotRegistered: Symbol(2),
-	wrongPassword: Symbol(3),
+	loginError: Symbol(2),
 };
 
 const db = new sqlite3.Database('./data.db')
@@ -30,11 +29,11 @@ async function dbInit() {
 
 async function tryLogin(username, password) {
 	if (!(await checkIfExists(username))) {
-		return dbReturn.userNotRegistered;
+		return dbReturn.loginError;
 	}
 
 	if (!(await validateUser(username, password))) {
-		return dbReturn.wrongPassword;
+		return dbReturn.loginError;
 	}
 
 	return dbReturn.OK;
@@ -62,8 +61,8 @@ async function storeUser(username, password) {
 
 /* Needs to be sure that there's a user with that username */
 async function validateUser(username, password) {
-	const user = await query(`SELECT username, hash FROM users WHERE username = "${username}"`)[0];
-	const currentHash = user.hash;
+	const user = await query(`SELECT username, hash FROM users WHERE username = "${username}"`);
+	const currentHash = user[0].hash;
 
 	return (await bcrypt.compare(password, currentHash));
 }
