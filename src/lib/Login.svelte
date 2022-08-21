@@ -34,6 +34,7 @@
 		}
 		
 		logged_in.set(true);
+		logged_user.set(usernameInput);
 		//TODO: what to do with data[]?
 	}
 
@@ -84,6 +85,7 @@
 	import { writable } from 'svelte/store';
 	/* Use a store to pass indication if user is logged */
 	export const logged_in = writable(false);
+	export const logged_user = writable('TestUsr1');
 </script>
 
 <div class="container">
