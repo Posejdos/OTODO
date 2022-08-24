@@ -1,3 +1,8 @@
+<!-- 
+	This is the main page.
+	Everything is dynamic in this app.
+ -->
+
 <script lang="ts">
 	import Hello from '$lib/Hello.svelte';
 	import Login, {logged_in} from '$lib/Login.svelte';
@@ -15,8 +20,10 @@
 	<meta name="description" content="Svelte Online TODO app" />
 </svelte:head>
 
+<!-- This is always visible -->
 <Hello />
 
+<!-- When user is logged in, show the tasks component -->
 {#if !auth_done}
 <Login />
 {:else}  
