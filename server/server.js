@@ -3,19 +3,28 @@ import express from 'express'
 import cors from 'cors'
 import {dbReturn, dbInit, tryLogin, trySignUp, readTasks, updateTasks} from './my_db.js'
 
+/* Express framework boilerplate code */
 const app = express()
 const port = process.env.PORT || 4000
+
+/* Initialize the database */
 await dbInit();
 
-// add a route that lives separately from the SvelteKit app
+/* Add a route that lives separately from the SvelteKit app */
 app.get('/healthcheck', (req, res) => {
     res.end('ok')
 });
 
+/* We send data using JSON*/
 app.use(express.json())
+
+/* Process login request */
 app.post('/login', async (req, res) => {
 	const {username, password} = req.body
 
+	/* 	Check if password matches username in database
+		and send an adequate response
+	*/
 	const loginResult = await tryLogin(username, password);
 	if (loginResult == dbReturn.loginError) {
 		res.json({
@@ -30,9 +39,13 @@ app.post('/login', async (req, res) => {
 	});
 });
 
+/* Process signup request */
 app.post('/signup', async (req, res) => {
 	const {username, password} = req.body
 
+	/* 	Check if username doesn't exist in database
+		and send an adequate response
+	*/
 	const signUpResult = await trySignUp(username, password);
 	if (signUpResult == dbReturn.userAlreadyExists) {
 		res.json({
@@ -47,6 +60,7 @@ app.post('/signup', async (req, res) => {
 	})
 });
 
+/* Retrieve the task list from database */
 app.post('/tasks', async (req, res) => {
 	const {user} = req.body;
 	const tasks = await readTasks(user);
@@ -56,6 +70,7 @@ app.post('/tasks', async (req, res) => {
 	});
 });
 
+/* Update the task list */
 app.post('/update_tasks', async (req, res) => {
 	const {user, values} = req.body;
 	await updateTasks(user, values);
@@ -63,6 +78,7 @@ app.post('/update_tasks', async (req, res) => {
 	res.json(200);
 });
 
+/* Express framework boilerplate code */
 app.use(handler)
 app.use(cors())
 app.listen(port, () => {
