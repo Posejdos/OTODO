@@ -67,6 +67,9 @@
 			return;
 		}
 		
+		page_disable = false;
+		logged_in.set(true);
+		logged_user.set(usernameInput);
 		alert("Sign up successfull");
 	}
 

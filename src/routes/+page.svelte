@@ -17,8 +17,8 @@
 
 <Hello />
 
-<!-- {#if !auth_done} -->
-<!-- <Login /> -->
-<!-- {:else}   -->
+{#if !auth_done}
+<Login />
+{:else}  
 <Tasks />
-<!-- {/if} -->
+{/if}
