@@ -56,23 +56,33 @@
         user_tasks_local.push(new Task("", tasks.length))
     }
 
-    async function saveTask(new_task) {
-        const new_value = new_task.value;
+    async function saveTask(task) {
+        const new_value = task.value;
 
         let updated = false;
-        user_tasks_db.forEach(async (old_task) => {
-            if (old_task.id == new_task.id) {
+        user_tasks_db.forEach((old_task) => {
+            if (old_task.id == task.id) {
                 old_task.value = new_value;                
                 updated = true;
             }
         });
 
         if (!updated) {
-            user_tasks_db.push(new_task)
+            user_tasks_db.push(task)
         }
 
-        await updateTasks(user_tasks_db);        
-        await getTasks();
+        await updateTasks(user_tasks_db);                
+    }
+
+    async function deleteTask(task) {
+        user_tasks_db.forEach(e => {
+            if (e.id == task.id) {
+                const ix = user_tasks_db.indexOf(e);
+                user_tasks_db.splice(ix, 1);
+            }
+        });
+
+        await updateTasks(user_tasks_db);
     }
 
     async function updateTasks(task_list) {
@@ -93,6 +103,8 @@
                 "content-type": "application/json"
             }
         });
+
+        await getTasks();
     }
 
 </script>
@@ -118,7 +130,7 @@
                 </span>
             </button>
 
-            <button class="btn_delete">
+            <button class="btn_delete" on:click={() => deleteTask(task)}>
                 <span class="material-icons">
                     delete
                 </span>
