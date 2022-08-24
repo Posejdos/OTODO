@@ -3,6 +3,7 @@
 	let passwordInput = '';
 	let page_disable = false;
 
+	/* Try to login with given credentials */
 	async function login() {
 		if (!validateUserAndPasswd(usernameInput, passwordInput)) {
 			clearInputs();
@@ -10,8 +11,10 @@
 			return;
 		}
 
+		/* Disable page while we process */
 		page_disable = true;
 
+		/* Try to login with a POST request */
 		const res = await fetch('/login', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -26,6 +29,7 @@
 		const res_json = await res.json();
 		const {userAuth} = res_json
 
+		/* Check if login successful */
 		if (!userAuth) {
 			clearInputs();
 			alert("Invalid username or password");
@@ -33,19 +37,25 @@
 			return;
 		}
 		
+		/* 	Let other components now we're logged in
+			and pass the username
+		*/
 		logged_in.set(true);
 		logged_user.set(usernameInput);
 	}
 
+	/* Try to create a new user with given credentials */
 	async function signUp() {
 		if (!validateUserAndPasswd(usernameInput, passwordInput)) {
 			clearInputs();
 			alert("Username or password are too short.");
 			return;			
 		}
-
+		
+		/* Disable page while we process */
 		page_disable = true;
 
+		/* Try to sign up with a POST request */
 		const res = await fetch('/signup', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -60,6 +70,7 @@
 		const res_json = await res.json()
 		const {ok} = res_json
 
+		/* Check if signup successful */
 		if (!ok) {
 			clearInputs();
 			alert("User with that name already exists");
@@ -67,6 +78,9 @@
 			return;
 		}
 		
+		/* 	Let other components now we're logged in
+			and pass the username
+		*/
 		page_disable = false;
 		logged_in.set(true);
 		logged_user.set(usernameInput);
