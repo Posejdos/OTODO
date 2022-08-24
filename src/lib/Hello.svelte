@@ -1,5 +1,4 @@
 <!--    This is the welcoming component
-        TODO: make it look more awesome?
 -->
 
 <section class="hello">
