@@ -3,6 +3,12 @@
     import {logged_user} from '$lib/Login.svelte';
 	import { onMount } from 'svelte';
 
+    /*  Every task we display needs an ID.
+        To achieve this, when we load 
+        tasks from database we create an array
+        of Task objects, assigning each of 
+        them an ID.
+    */
     class Task {
         constructor(value, id) {
             this.value = value;
@@ -10,10 +16,12 @@
         }
     }
 
+    /* Only call getTasks() when this component is loaded */
     onMount(async () => {
         await getTasks();
     });
 
+    /* Username */
     let user = '';
 
     /**
@@ -26,14 +34,22 @@
     */
     let user_tasks_local = [];
     
+    /* Get the username */
 	logged_user.subscribe(value => {
 		user = value;
 	});
 
+    /*  1. Get the task list from database
+        2. Convert it to array of Task objects
+        3. Add an empty Task for addition
+    */
     async function getTasks() {
         user_tasks_db = []
         user_tasks_local = []
 
+        /*  This needs to be a POST request, 
+            because GET requests can't have a body.
+        */
         const res = await fetch('/tasks', {
             method: 'POST',
             body: JSON.stringify({
@@ -47,6 +63,7 @@
         const res_json = await res.json();
         const {tasks} = res_json
 
+        /* Parse the task list to Task objects */
         for (let i = 0; i < tasks.length; i++) {
             const task = tasks[i];
             user_tasks_db.push(new Task(task, i));
@@ -56,10 +73,15 @@
         user_tasks_local.push(new Task("", tasks.length))
     }
 
+    /* Saves a task or modifies existing */
     async function saveTask(task) {
         const new_value = task.value;
 
         let updated = false;
+
+        /*  Check if task already exists and 
+            if it does, update it
+        */
         user_tasks_db.forEach((old_task) => {
             if (old_task.id == task.id) {
                 old_task.value = new_value;                
@@ -67,6 +89,7 @@
             }
         });
 
+        /* Add a new task if needed */
         if (!updated) {
             user_tasks_db.push(task)
         }
@@ -74,6 +97,7 @@
         await updateTasks(user_tasks_db);                
     }
 
+    /* Delete a task */
     async function deleteTask(task) {
         user_tasks_db.forEach(e => {
             if (e.id == task.id) {
@@ -85,14 +109,17 @@
         await updateTasks(user_tasks_db);
     }
 
+    /* Send the new list to database */
     async function updateTasks(task_list) {
         let values = [];
         task_list.forEach(task => {
+            /* We send only non-empty tasks */
             if (task.value != '') {
                 values.push(task.value);
             }
         });
 
+        /* Send via a POST request */
         await fetch('/update_tasks', {
             method: 'POST',
             body: JSON.stringify({
@@ -104,6 +131,7 @@
             }
         });
 
+        /* Update our task list */
         await getTasks();
     }
 
@@ -115,8 +143,8 @@
 <section class="tasks">
     <p class="welcome">Welcome, {user}!</p>
 
+    <!-- Svelte allows for dynamic DOM rendering -->
     {#each user_tasks_local as task}
-
         <div class="single_task"> 
             <textarea 
                 type="text" 
@@ -135,9 +163,7 @@
                     delete
                 </span>
             </button>
-
         </div>
-
     {/each}
 </section>
 
