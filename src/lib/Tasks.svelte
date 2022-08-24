@@ -1,6 +1,14 @@
 <script>
+    // @ts-nocheck
     import {logged_user} from '$lib/Login.svelte';
 	import { onMount } from 'svelte';
+
+    class Task {
+        constructor(value, id) {
+            this.value = value;
+            this.id = id;
+        }
+    }
 
     onMount(async () => {
         await getTasks();
@@ -9,12 +17,12 @@
     let user = '';
 
     /**
-    * @type {string[]}
+    * @type {Task[]}
     */
     let user_tasks_db = [];
 
     /**
-    * @type {string[]}
+    * @type {Task[]}
     */
     let user_tasks_local = [];
     
@@ -23,24 +31,68 @@
 	});
 
     async function getTasks() {
-        // const res = await fetch('/tasks', {
-        //     method: 'POST',
-        //     body: JSON.stringify({
-        //         user: user,
-        //     }),
-        //     headers: {
-        //         "content-type": "application/json"
-        //     }
-        // });
+        user_tasks_db = []
+        user_tasks_local = []
 
-        // const res_json = await res.json();
-        // const {tasks} = res_json
-		// user_tasks_db = tasks; 
+        const res = await fetch('/tasks', {
+            method: 'POST',
+            body: JSON.stringify({
+                user: user,
+            }),
+            headers: {
+                "content-type": "application/json"
+            }
+        });
 
-        //DEV
-        user_tasks_db = ["DEV", "DUPA", "TASKS ARE HIR", ""]
+        const res_json = await res.json();
+        const {tasks} = res_json
+
+        for (let i = 0; i < tasks.length; i++) {
+            const task = tasks[i];
+            user_tasks_db.push(new Task(task, i));
+        }
         
         user_tasks_local = user_tasks_db
+        user_tasks_local.push(new Task("", tasks.length))
+    }
+
+    async function saveTask(new_task) {
+        const new_value = new_task.value;
+
+        let updated = false;
+        user_tasks_db.forEach(async (old_task) => {
+            if (old_task.id == new_task.id) {
+                old_task.value = new_value;                
+                updated = true;
+            }
+        });
+
+        if (!updated) {
+            user_tasks_db.push(new_task)
+        }
+
+        await updateTasks(user_tasks_db);        
+        await getTasks();
+    }
+
+    async function updateTasks(task_list) {
+        let values = [];
+        task_list.forEach(task => {
+            if (task.value != '') {
+                values.push(task.value);
+            }
+        });
+
+        await fetch('/update_tasks', {
+            method: 'POST',
+            body: JSON.stringify({
+                user: user,
+                values: values,
+            }),
+            headers: {
+                "content-type": "application/json"
+            }
+        });
     }
 
 </script>
@@ -58,9 +110,9 @@
                 type="text" 
                 class="field_task" 
                 placeholder="New task..."
-                bind:value={task}></textarea>
+                bind:value={task.value}></textarea>
 
-            <button class="btn_save">
+            <button class="btn_save" on:click={() => saveTask(task)}>
                 <span class="material-icons">
                     save
                 </span>

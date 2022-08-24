@@ -64,12 +64,21 @@ async function readTasks(username) {
 	return ret;
 }
 
+async function updateTasks(username, tasks) {
+	await query(`UPDATE users SET tasks="" WHERE username = "${username}"`);
+
+	for (let i = 0; i < tasks.length; i++) {
+		const task = tasks[i];
+		await addTask(username, task);
+	}
+}
+
+/* -------------PRIVATE-----------------*/
 async function addTask(username, task) {
 	let usr = await query(`SELECT tasks FROM users WHERE username = "${username}"`);
-	usr[0].tasks += `${task};`
-	await query(`UPDATE users SET tasks="${usr[0].tasks}" WHERE username = "${username}"`);
+	usr[0].tasks += `;${task};`
+	await query(`UPDATE users SET tasks="${usr[0].tasks}" WHERE username = "${username}"`, "run");
 }
-/* -------------PRIVATE-----------------*/
 
 async function checkIfExists(username) {
 	const user = await query(`SELECT * FROM users WHERE username = "${username}"`);
@@ -107,4 +116,4 @@ const createTestUsers = async() => {
 	}
 };
 
-export {dbReturn, dbInit, tryLogin, trySignUp, readTasks, addTask};
+export {dbReturn, dbInit, tryLogin, trySignUp, readTasks, updateTasks};
