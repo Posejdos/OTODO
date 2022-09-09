@@ -22,7 +22,7 @@ describe("Database tests", () => {
     });
 
     test("SignUp: new username", async () => {
-        const res = await trySignUp("NewUser", "NewPassword");
+        const res = await trySignUp(Math.random().toString(), "NewPassword");
         expect(res).toBe(dbReturn.OK);
     });
 
